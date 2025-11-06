@@ -34,13 +34,7 @@ public class ChefDetailsServlet extends HttpServlet {
                 .buildApplication(getServletContext())
                 .buildExchange(request, response);
 
-        long chefId = -1L;
-        try {
-            chefId = Long.parseLong(request.getParameter("chefId"));
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
-        }
-
+        Long chefId = Long.parseLong(request.getParameter("chefId"));
         Chef chef = chefService.findById(chefId);
 
         WebContext context = new WebContext(webExchange);
@@ -51,17 +45,15 @@ public class ChefDetailsServlet extends HttpServlet {
         templateEngine.process("chefDetails.html", context, response.getWriter());
     }
 
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        long chefId = -1L;
-        try {
-            chefId = Long.parseLong(request.getParameter("chefId"));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        Long chefId = Long.parseLong(request.getParameter("chefId"));
         String dishId = request.getParameter("dishId");
-        Dish dish = dishService.findByDishId(dishId);
-        Chef chef = chefService.addDishToChef(chefId, dish.getDishId());
-        response.sendRedirect("/chefDetails?chefId=" + chef.getId());
+
+        Chef chef = chefService.addDishToChef(chefId, dishId);
+
+        response.sendRedirect("/chefDetails?chefId=" + chefId);
     }
+
 }

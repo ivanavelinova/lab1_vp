@@ -26,21 +26,13 @@ public class DishServlet extends HttpServlet {
         this.dishService = dishService;
         this.chefService = chefService;
     }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())
                 .buildExchange(request, response);
 
-        long chefId = -1L;
-
-        try {
-            chefId = Long.parseLong(request.getParameter("chefId"));
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
-        }
-
+        Long chefId = Long.parseLong(request.getParameter("chefId"));
         Chef chef = chefService.findById(chefId);
 
         WebContext context = new WebContext(webExchange);
@@ -53,7 +45,8 @@ public class DishServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String chefId = request.getParameter("chefId");
+        Long chefId = Long.parseLong(request.getParameter("chefId"));
         response.sendRedirect("/dish?chefId=" + chefId);
     }
+
 }

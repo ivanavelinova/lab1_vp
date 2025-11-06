@@ -26,8 +26,9 @@ public class ChefServiceImpl implements ChefService {
 
     @Override
     public Chef findById(Long id) {
-        return chefRepository.findById(id).isPresent() ? chefRepository.findById(id).get() : null;
+        return chefRepository.findById(id).orElse(null);
     }
+
 
     @Override
     public Chef addDishToChef(Long chefId, String dishId) {
