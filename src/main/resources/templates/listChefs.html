@@ -9,6 +9,7 @@
             margin: auto;
             font-family: Arial, sans-serif;
         }
+
         h1 {
             color: #333;
         }
@@ -21,10 +22,17 @@
 <main>
     <h2>Choose a chef:</h2>
     <form action="/dish" method="POST">
-        <input th:each="chef : ${chefs}" type="radio" name="chefId" th:value="${chef.getId()}" style="white-space: pre"
-               th:utext="'Name: ' + ${chef.getFirstName()} + ' ' + ${chef.getLastName()} + ', Bio: ' + ${chef.getBio()} + '<br />'"/>
-        <input type="submit" value="Submit">
+        <div th:each="chef : ${chefs}">
+            <input type="radio"
+                   name="chefId"
+                   th:value="${chef.id}"/>
+            <span th:text="${chef.firstName} + ' ' + ${chef.lastName} + ' (' + ${chef.bio} + ')'"></span>
+            <br/>
+        </div>
+
+        <input type="submit" value="Submit"/>
     </form>
+
 </main>
 </body>
 </html>

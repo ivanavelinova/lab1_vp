@@ -41,10 +41,15 @@
 <section>
     <h2>Select dish:</h2>
     <form action="/chefDetails" method="POST">
+
         <input type="hidden" name="chefId" th:value="${chefId}">
-        <input th:each="dish : ${dishes}" type="radio" name="dishId" th:value="${dish.getDishId()}" style="white-space: pre"
-               th:utext="${dish.getName()} + '<br />'"/>
-        <br/>
+
+        <div th:each="dish : ${dishes}">
+            <input type="radio" name="dishId" th:value="${dish.dishId}">
+            <span th:text="${dish.name} + ' (' + ${dish.cuisine} + ') '"></span>
+            <br/>
+        </div>
+
         <input type="submit" value="Add dish">
     </form>
 </section>
