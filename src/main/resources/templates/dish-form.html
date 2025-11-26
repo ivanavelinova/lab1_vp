@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dish Form</title>
+</head>
+<body>
+<h1 th:text="${dish.id != null} ? 'Edit Dish' : 'Add New Dish'"></h1>
+
+<!-- Формата користи formAction од моделот -->
+<form th:action="@{${formAction}}" method="post">
+    <label>Dish ID:
+        <input type="text" name="dishId" th:value="${dish.dishId}" required/>
+    </label><br/>
+
+    <label>Name:
+        <input type="text" name="name" th:value="${dish.name}" required/>
+    </label><br/>
+
+    <label>Cuisine:
+        <input type="text" name="cuisine" th:value="${dish.cuisine}" required/>
+    </label><br/>
+
+    <label>Preparation Time:
+        <input type="number" name="preparationTime" th:value="${dish.preparationTime}" required/>
+    </label><br/>
+
+    <button type="submit">Save</button>
+</form>
+
+<a th:href="@{/dishes}">Back to list</a>
+</body>
+</html>
