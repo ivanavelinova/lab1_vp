@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.lab.repository.impl;
 
-import mk.ukim.finki.wp.lab.bootstrap.DataHolder;
+import mk.ukim.finki.wp.lab.DataHolder;
 import mk.ukim.finki.wp.lab.model.Chef;
 import mk.ukim.finki.wp.lab.repository.ChefRepository;
 import org.springframework.stereotype.Repository;
