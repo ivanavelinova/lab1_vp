@@ -1,4 +1,5 @@
 package mk.ukim.finki.wp.lab.web.controller;
+
 import mk.ukim.finki.wp.lab.model.Dish;
 import mk.ukim.finki.wp.lab.service.DishService;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,7 @@ public class DishController {
 
     @GetMapping("/dish-form")
     public String getAddDishPage(Model model) {
-        model.addAttribute("dish", new Dish("", "", "", 0));
+        model.addAttribute("dish", new Dish());
         model.addAttribute("formAction", "/dishes/add");
         return "dish-form";
     }
@@ -39,7 +40,6 @@ public class DishController {
         model.addAttribute("formAction", "/dishes/edit/" + id);
         return "dish-form";
     }
-
 
     @PostMapping("/add")
     public String saveDish(@RequestParam String dishId,
@@ -56,7 +56,10 @@ public class DishController {
                            @RequestParam String name,
                            @RequestParam String cuisine,
                            @RequestParam int preparationTime) {
-        dishService.update(id, dishId, name, cuisine, preparationTime);
+        Dish updated = dishService.update(id, dishId, name, cuisine, preparationTime);
+        if (updated == null) {
+            return "redirect:/dishes?error=DishNotFound";
+        }
         return "redirect:/dishes";
     }
 
@@ -65,4 +68,5 @@ public class DishController {
         dishService.delete(id);
         return "redirect:/dishes";
     }
+
 }

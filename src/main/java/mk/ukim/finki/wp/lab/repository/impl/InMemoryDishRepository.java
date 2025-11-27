@@ -13,12 +13,13 @@ import java.util.Optional;
 public class InMemoryDishRepository implements DishRepository {
 
     private final List<Dish> dishes = new ArrayList<>();
-
+    private Long nextId = 1L;
 
     @PostConstruct
     public void init() {
-        save(new Dish("d1", "Spaghetti", "Italian", 20));
-        save(new Dish("d2", "Sushi", "Japanese", 30));
+        save(new Dish("D001", "Pasta Carbonara", "Italian", 20));
+        save(new Dish("D002", "Sushi Roll", "Japanese", 30));
+        save(new Dish("D003", "Tacos", "Mexican", 15));
     }
 
     @Override
@@ -36,11 +37,17 @@ public class InMemoryDishRepository implements DishRepository {
 
     @Override
     public Optional<Dish> findById(Long id) {
-        return dishes.stream().filter(d -> d.getId().equals(id)).findFirst();
+        return dishes.stream()
+                .filter(d -> d.getId().equals(id))
+                .findFirst();
     }
 
     @Override
     public Dish save(Dish dish) {
+        if (dish.getId() == null) {
+            dish.setId(nextId++);
+        }
+
         Optional<Dish> existing = findById(dish.getId());
         if (existing.isPresent()) {
             Dish d = existing.get();

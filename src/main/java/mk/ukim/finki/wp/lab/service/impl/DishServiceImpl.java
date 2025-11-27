@@ -33,7 +33,12 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public Dish create(String dishId, String name, String cuisine, int preparationTime) {
-        Dish dish = new Dish(dishId, name, cuisine, preparationTime);
+        Dish dish = new Dish();
+        dish.setId(null); // id ќе се генерира во repository
+        dish.setDishId(dishId);
+        dish.setName(name);
+        dish.setCuisine(cuisine);
+        dish.setPreparationTime(preparationTime);
         return dishRepository.save(dish);
     }
 

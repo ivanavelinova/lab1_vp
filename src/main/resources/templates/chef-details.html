@@ -31,10 +31,10 @@
 </header>
 <section>
     <h2>Bio: <span th:text="${chefBio}"></span></h2>
-    <h2>Dishes prepared by this chef:</h2>
-    <ul th:each="dish : ${dishes}">
-        <li th:text="${dish.getName()} + '(' + ${dish.getCuisine()} + ', ' + ${dish.getPreparationTime()} + ' min)'"></li>
-    </ul>
+    <h2>Dishes prepared by this chef:</h2><ul th:each="dish : ${dishes}">
+    <li th:text="${dish.name} + '(' + ${dish.cuisine} + ', ' + ${dish.preparationTime} + ' min)'"></li>
+</ul>
+
 </section>
 </body>
 </html>

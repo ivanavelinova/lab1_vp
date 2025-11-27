@@ -1,0 +1,66 @@
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chefs List</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<h1>Chefs List</h1>
+
+<div th:if="${error}" style="color:red;">
+    <p th:text="${error}"></p>
+</div>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Bio</th>
+        <th>Dishes</th>
+        <th>Add Dish</th>
+        <th>Details</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="chef : ${chefs}">
+        <td th:text="${chef.id}"></td>
+        <td th:text="${chef.firstName} + ' ' + ${chef.lastName}"></td>
+        <td th:text="${chef.bio}"></td>
+        <td>
+            <ul>
+                <li th:each="dish : ${chef.dishes}" th:text="${dish.name} + ' (' + ${dish.cuisine} + ')'"></li>
+            </ul>
+        </td>
+        <td>
+            <form th:action="@{'/chefs/' + ${chef.id} + '/add-dish'}" method="post">
+                <div th:each="dish : ${dishes}">
+                    <input type="radio" name="dishId" th:value="${dish.dishId}" required>
+                    <span th:text="${dish.name} + ' (' + ${dish.cuisine} + ')'"></span>
+                    <br/>
+                </div>
+                <button type="submit">Add dish</button>
+            </form>
+        </td>
+        <td>
+            <a th:href="@{'/chefs/' + ${chef.id}}">View Details</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
