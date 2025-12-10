@@ -18,15 +18,15 @@
 </header>
 <section>
     <h2>Select dish:</h2>
-    <form th:action="@{'/chefs/' + ${chefId} + '/add-dish'}" method="post">
+    <form th:action="@{'/chefs/' + ${chef.id} + '/add-dish'}" method="post">
+        <select name="dishId">
+            <option th:each="dish : ${dishes}" th:value="${dish.id}" th:text="${dish.name}"></option>
 
-        <div th:each="dish : ${dishes}">
-            <input type="radio" name="dishId" th:value="${dish.dishId}" required>
-            <span th:text="${dish.name} + ' (' + ${dish.cuisine} + ')'"></span><br/>
-        </div>
-
-        <input type="submit" value="Add dish">
+        </select>
+        <button type="submit">Add Dish</button>
     </form>
+
+
 </section>
 <aside>
     <table>

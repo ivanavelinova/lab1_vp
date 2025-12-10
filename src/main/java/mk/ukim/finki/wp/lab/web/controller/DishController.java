@@ -1,6 +1,8 @@
 package mk.ukim.finki.wp.lab.web.controller;
 
+import mk.ukim.finki.wp.lab.model.Chef;
 import mk.ukim.finki.wp.lab.model.Dish;
+import mk.ukim.finki.wp.lab.service.ChefService;
 import mk.ukim.finki.wp.lab.service.DishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,22 +13,25 @@ import org.springframework.web.bind.annotation.*;
 public class DishController {
 
     private final DishService dishService;
+    private final ChefService chefService;
 
-    public DishController(DishService dishService) {
+    public DishController(DishService dishService, ChefService chefService) {
         this.dishService = dishService;
+        this.chefService = chefService;
     }
 
     @GetMapping
-    public String getDishesPage(@RequestParam(required = false) String error, Model model) {
+    public String getDishesPage(Model model) {
         model.addAttribute("dishes", dishService.listDishes());
-        model.addAttribute("error", error);
-        return "listDishes";
+        return "listDishes"; // <--- мора да се совпаѓа со listDishes.html
     }
+
 
     @GetMapping("/dish-form")
     public String getAddDishPage(Model model) {
         model.addAttribute("dish", new Dish());
         model.addAttribute("formAction", "/dishes/add");
+        model.addAttribute("chefs", chefService.listAll()); // додавање на листа со готвачи
         return "dish-form";
     }
 
@@ -38,6 +43,7 @@ public class DishController {
         }
         model.addAttribute("dish", dish);
         model.addAttribute("formAction", "/dishes/edit/" + id);
+        model.addAttribute("chefs", chefService.listAll()); // додавање на листа со готвачи
         return "dish-form";
     }
 
@@ -45,8 +51,10 @@ public class DishController {
     public String saveDish(@RequestParam String dishId,
                            @RequestParam String name,
                            @RequestParam String cuisine,
-                           @RequestParam int preparationTime) {
-        dishService.create(dishId, name, cuisine, preparationTime);
+                           @RequestParam int preparationTime,
+                           @RequestParam(required = false) Long chefId) {
+
+        dishService.create(dishId, name, cuisine, preparationTime, chefId);
         return "redirect:/dishes";
     }
 
@@ -55,8 +63,10 @@ public class DishController {
                            @RequestParam String dishId,
                            @RequestParam String name,
                            @RequestParam String cuisine,
-                           @RequestParam int preparationTime) {
-        Dish updated = dishService.update(id, dishId, name, cuisine, preparationTime);
+                           @RequestParam int preparationTime,
+                           @RequestParam(required = false) Long chefId) {
+
+        Dish updated = dishService.update(id, dishId, name, cuisine, preparationTime, chefId);
         if (updated == null) {
             return "redirect:/dishes?error=DishNotFound";
         }
@@ -68,5 +78,4 @@ public class DishController {
         dishService.delete(id);
         return "redirect:/dishes";
     }
-
 }

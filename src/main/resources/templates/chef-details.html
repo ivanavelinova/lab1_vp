@@ -25,16 +25,14 @@
     </style>
 </head>
 <body>
-<!-- Dynamically display data -->
-<header>
-    <h1>Chef: <span th:text="${chefName}"></span></h1>
-</header>
-<section>
-    <h2>Bio: <span th:text="${chefBio}"></span></h2>
-    <h2>Dishes prepared by this chef:</h2><ul th:each="dish : ${dishes}">
-    <li th:text="${dish.name} + '(' + ${dish.cuisine} + ', ' + ${dish.preparationTime} + ' min)'"></li>
+<!-- Dynamically display data --><h1 th:text="${chef.firstName} + ' ' + ${chef.lastName}"></h1>
+<p th:text="${chef.bio}"></p>
+
+<h3>Dishes:</h3>
+<ul>
+    <li th:each="dish : ${chef.dishes}" th:text="${dish.name} + ' (' + ${dish.cuisine} + ')'"></li>
 </ul>
 
-</section>
+
 </body>
 </html>

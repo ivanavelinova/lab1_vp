@@ -48,14 +48,16 @@
         </td>
         <td>
             <form th:action="@{'/chefs/' + ${chef.id} + '/add-dish'}" method="post">
-                <div th:each="dish : ${dishes}">
-                    <input type="radio" name="dishId" th:value="${dish.dishId}" required>
-                    <span th:text="${dish.name} + ' (' + ${dish.cuisine} + ')'"></span>
-                    <br/>
-                </div>
+                <select name="dishId" required>
+                    <option th:each="dish : ${dishes}"
+                            th:value="${dish.id}"
+                            th:text="${dish.name} + ' (' + ${dish.cuisine} + ')'">
+                    </option>
+                </select>
                 <button type="submit">Add dish</button>
             </form>
         </td>
+
         <td>
             <a th:href="@{'/chefs/' + ${chef.id}}">View Details</a>
         </td>

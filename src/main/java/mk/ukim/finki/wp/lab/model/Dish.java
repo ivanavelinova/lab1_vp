@@ -1,38 +1,35 @@
 package mk.ukim.finki.wp.lab.model;
 
-public class Dish {
-    private  static Long counter = 0L;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+public class Dish {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String dishId;
+
     private String name;
     private String cuisine;
     private int preparationTime;
 
-    public Dish() {} // празен конструктор за форми
+    @ManyToOne
+    private Chef chef;
 
     public Dish(String dishId, String name, String cuisine, int preparationTime) {
-        this.id = ++counter;
         this.dishId = dishId;
         this.name = name;
         this.cuisine = cuisine;
         this.preparationTime = preparationTime;
-    }
-
-
-    // Гетери и сетери
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getDishId() { return dishId; }
-    public void setDishId(String dishId) { this.dishId = dishId; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getCuisine() { return cuisine; }
-    public void setCuisine(String cuisine) { this.cuisine = cuisine; }
-    public int getPreparationTime() { return preparationTime; }
-    public void setPreparationTime(int preparationTime) { this.preparationTime = preparationTime; }
-
-    private synchronized Long generateId() {
-        return ++counter;
     }
 }

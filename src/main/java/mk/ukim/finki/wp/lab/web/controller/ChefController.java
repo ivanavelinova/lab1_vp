@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/chefs")
 public class ChefController {
@@ -21,47 +19,34 @@ public class ChefController {
         this.dishService = dishService;
     }
 
-    // Листање на сите готвачи
     @GetMapping
-    public String getChefsPage(Model model) {
-        List<Chef> chefs = chefService.listChefs();
-        model.addAttribute("chefs", chefs);
-        model.addAttribute("dishes", dishService.listDishes()); // ⚡ додадено
-        return "chefs-list";
-    }
-
-    // Детали за готвач
-    @GetMapping("/{id}")
-    public String getChefDetails(@PathVariable Long id, Model model) {
-        Chef chef = chefService.findById(id);
-        if (chef == null) {
-            return "redirect:/chefs?error=ChefNotFound";
-        }
-        model.addAttribute("chefName", chef.getFirstName() + " " + chef.getLastName());
-        model.addAttribute("chefBio", chef.getBio());
-        model.addAttribute("dishes", chef.getDishes());
-        model.addAttribute("chefId", chef.getId());
-        return "chef-details";
-    }
-
-    // Страница за избор на јадење за додавање кај готвач
-    @GetMapping("/{id}/add-dish")
-    public String getAddDishToChefForm(@PathVariable Long id, Model model) {
-        Chef chef = chefService.findById(id);
-        if (chef == null) {
-            return "redirect:/chefs?error=ChefNotFound";
-        }
-        model.addAttribute("chefId", chef.getId());
-        model.addAttribute("chefName", chef.getFirstName() + " " + chef.getLastName());
+    public String listChefs(Model model) {
+        model.addAttribute("chefs", chefService.listAll());
+        // *** ДОДАДЕНО: Мора да ги додадеш сите јадења во моделот! ***
         model.addAttribute("dishes", dishService.listDishes());
-        return "add-dish";
+        return "chefs-list"; // thymeleaf template
     }
 
-    // Додавање јадење кај готвач
-    @PostMapping("/{chefId}/add-dish")
-    public String addDishToChef(@PathVariable Long chefId,
-                                @RequestParam String dishId) {
-        chefService.addDishToChef(chefId, dishId);
-        return "redirect:/chefs/" + chefId;
+    @GetMapping("/{id}/add-dish")
+    public String showAddDishForm(@PathVariable Long id, Model model) {
+        model.addAttribute("chef", chefService.findById(id));
+        model.addAttribute("dishes", dishService.listDishes());
+        return "add-dish"; // thymeleaf template
     }
+
+    @PostMapping("/{id}/add-dish")
+    public String addDishToChef(@PathVariable Long id, @RequestParam String dishId) {
+        chefService.addDishToChef(id, dishId);
+        return "redirect:/chefs";
+    }
+    @GetMapping("/{id}")
+    public String viewChefDetails(@PathVariable Long id, Model model) {
+        Chef chef = chefService.findById(id);
+        if (chef == null) {
+            return "redirect:/chefs?error=ChefNotFound";
+        }
+        model.addAttribute("chef", chef);
+        return "chef-details"; // Твојата Thymeleaf страница за детали на готвач
+    }
+
 }
